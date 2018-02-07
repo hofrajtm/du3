@@ -19,27 +19,70 @@ public class Du3 {
      */
     public static void main(String[] args) {
         
-        /* Vytvoření pole integerů s daty o zadaných velikostech, které
-        odpovídají 10^k, kde k = 2, 3, 4, 5, 6.*/
-        int[] velikostPole = new int []{100, 1000, 10000, 100000, 1000000};
-        
-        // For cyklus pro aplikaci dat o jednotlivých velikostech.
-        for (int i = 0; i < velikostPole.length; i++) {
-            
-            int[] pole = new int[velikostPole[i]];
-        
-            int Min = Integer.MIN_VALUE;
-            int Max = Integer.MAX_VALUE;
-            
-            /* For cyklus pro generování náhodného integeru do jednotlivých
-            prvů pole.*/
-            for (int j = 0; j < pole.length; j++) {
-                pole[j] = (int) (Math.random() * (Max) + Math.random() * (Min));           
-            }
-            
-        System.out.println(Arrays.toString(pole));
-        
+        /* Vytvoření pole polí o zadaných velikostech, které odpovídají 10^k,
+        kde k = 2, 3, 4, 5, 6.*/
+        int[][] polePoli = new int [5][];
+        for (int i = 0; i < polePoli.length; i++) {
+            polePoli[i] = new int [(int) Math.pow(10, i + 2)];
         }
+        
+        // Nadefinování velikostí polí pole pro náhodné integery.
+        int[][] poleIntegerNahodne = polePoli;
+        int Min = -10000; //Integer.MIN_VALUE;
+        int Max = 10000; //Integer.MAX_VALUE;
+        for (int i = 0; i < poleIntegerNahodne.length; i++) {
+            for (int j = 0; j < poleIntegerNahodne[i].length; j++) {
+                poleIntegerNahodne[i][j] = (int) (Math.random() * (Min) + Math.random() * (Max));
+            }
+        }
+        System.out.println(Arrays.toString(poleIntegerNahodne[0]));
+//        System.out.println(Arrays.toString(poleIntegerNahodne[1]));
+//        System.out.println(Arrays.toString(poleIntegerNahodne[2]));
+//        System.out.println(Arrays.toString(poleIntegerNahodne[3]));
+//        System.out.println(Arrays.toString(poleIntegerNahodne[4]));
+        
+        // Nadefinování velikostí polí pole pro setříděné integery.
+        int[][] poleIntegerSetridene = polePoli;
+        for (int i = 0; i < poleIntegerSetridene.length; i++) {
+            for (int j = 0; j < poleIntegerSetridene[i].length; j++) {
+                poleIntegerSetridene[i][j] = j + 1;
+            }
+        }
+        System.out.println(Arrays.toString(poleIntegerSetridene[0]));
+//        System.out.println(Arrays.toString(poleIntegerSetridene[1]));
+//        System.out.println(Arrays.toString(poleIntegerSetridene[2]));
+//        System.out.println(Arrays.toString(poleIntegerSetridene[3]));
+//        System.out.println(Arrays.toString(poleIntegerSetridene[4]));
+        
+        /* Nadefinování velikostí polí pole pro setříděné integery s 1 %
+        náhodně prohozených prvků.*/
+        int[][] poleIntegerMixovane = polePoli;
+        for (int i = 0; i < poleIntegerMixovane.length; i++) {
+            for (int j = 0; j < poleIntegerMixovane[i].length; j++) {
+                poleIntegerMixovane[i][j] = j + 1;
+            }
+        }
+        
+        System.out.println(Arrays.toString(poleIntegerMixovane[0]));
+//        System.out.println(Arrays.toString(poleIntegerMixovane[1]));
+//        System.out.println(Arrays.toString(poleIntegerMixovane[2]));
+//        System.out.println(Arrays.toString(poleIntegerMixovane[3]));
+//        System.out.println(Arrays.toString(poleIntegerMixovane[4]));
+        
+        // Tisk pole polí.
+        // Varianta A
+//        for (int i = 0; i < poleIntegerNahodny.length; i++) {
+//            for (int j = 0; j < poleIntegerNahodny[i].length; j++) {
+//                System.out.print(poleIntegerNahodny[i][j] + " ");
+//            }
+//            System.out.println(" ");
+//        }
+        // Varianta B
+//        System.out.print(Arrays.toString(polePoli[0]));
+//        System.out.print(Arrays.toString(polePoli[1]));
+//        System.out.print(Arrays.toString(polePoli[2]));
+//        System.out.print(Arrays.toString(polePoli[3]));
+//        System.out.print(Arrays.toString(polePoli[4]));
     }
     
 //    void insertSort (int[] x, int temp) {
