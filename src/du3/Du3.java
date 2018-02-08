@@ -6,7 +6,6 @@
 package du3;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  *
@@ -18,15 +17,15 @@ public class Du3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         /* Vytvoření pole polí o zadaných velikostech, které odpovídají 10^k,
         kde k = 2, 3, 4, 5, 6.*/
-        int[][] polePoli = new int [5][];
+        int[][] polePoli = new int[5][];
         for (int i = 0; i < polePoli.length; i++) {
-            polePoli[i] = new int [(int) Math.pow(10, i + 2)];
+            polePoli[i] = new int[(int) Math.pow(10, i + 2)];
         }
-        
-        // Nadefinování velikostí polí pole pro náhodné integery.
+
+        // Nadefinování hodnot polí pole pro náhodné integery.
         int[][] poleIntegerNahodne = polePoli;
         int Min = -10000; //Integer.MIN_VALUE;
         int Max = 10000; //Integer.MAX_VALUE;
@@ -35,26 +34,16 @@ public class Du3 {
                 poleIntegerNahodne[i][j] = (int) (Math.random() * (Min) + Math.random() * (Max));
             }
         }
-        System.out.println(Arrays.toString(poleIntegerNahodne[0]));
-//        System.out.println(Arrays.toString(poleIntegerNahodne[1]));
-//        System.out.println(Arrays.toString(poleIntegerNahodne[2]));
-//        System.out.println(Arrays.toString(poleIntegerNahodne[3]));
-//        System.out.println(Arrays.toString(poleIntegerNahodne[4]));
-        
-        // Nadefinování velikostí polí pole pro setříděné integery.
+
+        // Nadefinování hodnot polí pole pro setříděné integery.
         int[][] poleIntegerSetridene = polePoli;
         for (int i = 0; i < poleIntegerSetridene.length; i++) {
             for (int j = 0; j < poleIntegerSetridene[i].length; j++) {
                 poleIntegerSetridene[i][j] = j + 1;
             }
         }
-        System.out.println(Arrays.toString(poleIntegerSetridene[0]));
-//        System.out.println(Arrays.toString(poleIntegerSetridene[1]));
-//        System.out.println(Arrays.toString(poleIntegerSetridene[2]));
-//        System.out.println(Arrays.toString(poleIntegerSetridene[3]));
-//        System.out.println(Arrays.toString(poleIntegerSetridene[4]));
-        
-        /* Nadefinování velikostí polí pole pro setříděné integery s 1 %
+
+        /* Nadefinování hodnot polí pole pro setříděné integery s 1 %
         náhodně prohozených prvků.*/
         int[][] poleIntegerMixovane = polePoli;
         for (int i = 0; i < poleIntegerMixovane.length; i++) {
@@ -62,13 +51,42 @@ public class Du3 {
                 poleIntegerMixovane[i][j] = j + 1;
             }
         }
-        
+
+        for (int i = 0; i < poleIntegerMixovane.length; i++) {
+            int zmenenePrvky = 0;
+            do {
+                int nahodnyPrvek = (int) (Math.random() * poleIntegerMixovane[i].length);
+                switch (poleIntegerMixovane[i].length) {
+                    case 100:
+                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                        zmenenePrvky += 1;
+                        break;
+                    case 1000:
+                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                        zmenenePrvky += 1;
+                        break;
+                    case 10000:
+                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                        zmenenePrvky += 1;
+                        break;
+                    case 100000:
+                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                        zmenenePrvky += 1;
+                        break;
+                    case 1000000:
+                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                        zmenenePrvky += 1;
+                        break;
+                }
+            } while (zmenenePrvky != (poleIntegerMixovane[i].length / 100));
+        }
+
         System.out.println(Arrays.toString(poleIntegerMixovane[0]));
-//        System.out.println(Arrays.toString(poleIntegerMixovane[1]));
-//        System.out.println(Arrays.toString(poleIntegerMixovane[2]));
-//        System.out.println(Arrays.toString(poleIntegerMixovane[3]));
-//        System.out.println(Arrays.toString(poleIntegerMixovane[4]));
-        
+        System.out.println(Arrays.toString(poleIntegerMixovane[1]));
+        System.out.println(Arrays.toString(poleIntegerMixovane[2]));
+        System.out.println(Arrays.toString(poleIntegerMixovane[3]));
+        System.out.println(Arrays.toString(poleIntegerMixovane[4]));
+
         // Tisk pole polí.
         // Varianta A
 //        for (int i = 0; i < poleIntegerNahodny.length; i++) {
@@ -84,7 +102,7 @@ public class Du3 {
 //        System.out.print(Arrays.toString(polePoli[3]));
 //        System.out.print(Arrays.toString(polePoli[4]));
     }
-    
+
 //    void insertSort (int[] x, int temp) {
 //        for(int i = 0; i < x.length; i++) {
 //            int j = i; //Zapamatuj index zpracovávaného prvku
