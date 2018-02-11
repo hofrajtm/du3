@@ -5,8 +5,6 @@
  */
 package du3;
 
-import java.util.Arrays;
-
 /**
  *
  * @author Martin
@@ -35,7 +33,8 @@ public class Du3 {
             for (int j = 0; j < poleIntegerNahodne[i].length; j++) {
                 poleIntegerNahodne[i][j] = (int) (Math.random() * (Min) + Math.random() * (Max));
             }
-        }      
+        }
+        aplikaceTridicichAlgoritmu(poleIntegerNahodne);
 
         System.out.println();
         System.out.println("SETŘÍDĚNÉ INTEGERY");
@@ -47,6 +46,7 @@ public class Du3 {
                 poleIntegerSetridene[i][j] = j + 1;
             }
         }
+        aplikaceTridicichAlgoritmu(poleIntegerSetridene);
 
         System.out.println();
         System.out.println("MIXOVANÉ INTEGERY");
@@ -59,177 +59,140 @@ public class Du3 {
                 poleIntegerMixovane[i][j] = j + 1;
             }
         }
-
         for (int i = 0; i < poleIntegerMixovane.length; i++) {
             int zmenenePrvky = 0;
             do {
                 int nahodnyPrvek = (int) (Math.random() * poleIntegerMixovane[i].length);
-                switch (poleIntegerMixovane[i].length) {
-                    case 100:
-                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
-                        zmenenePrvky += 1;
-                        break;
-                    case 1000:
-                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
-                        zmenenePrvky += 1;
-                        break;
-                    case 10000:
-                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
-                        zmenenePrvky += 1;
-                        break;
-                    case 100000:
-                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
-                        zmenenePrvky += 1;
-                        break;
-                    case 1000000:
-                        poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
-                        zmenenePrvky += 1;
-                        break;
-                }
+                poleIntegerMixovane[i][nahodnyPrvek] = (int) (Math.random() * (-(poleIntegerMixovane[i].length)) + Math.random() * ((poleIntegerMixovane[i].length)));
+                zmenenePrvky += 1;
             } while (zmenenePrvky != (poleIntegerMixovane[i].length / 100));
         }
+        aplikaceTridicichAlgoritmu(poleIntegerMixovane);
+    }
 
-        // Tisk pole polí.
-        // Varianta A
+    // Metoda třídění dle přímého vkládání, tj. Insert sort.
+    public static void insertSort(int[] pole) {
+        for (int i = 0; i < pole.length; i++) {
+            int j = i;
+            int temp = pole[j];
+            while (j > 0 && pole[j - 1] > temp) {
+                pole[j] = pole[j - 1];
+                j--;
+            }
+            pole[j] = temp;
+        }
+    }
+
+    // Metoda bublinkového třídění, tj. Bubble sort.
+    public static void bubbleSort(int[] pole) {
+        for (int i = 0; i < pole.length; i++) {
+            for (int j = pole.length - 1; j > i; j--) {
+                if (pole[j] < pole[j - 1]) {
+                    int temp = pole[j];
+                    pole[j] = pole[j - 1];
+                    pole[j - 1] = temp;
+                }
+            }
+        }
+    }
+
+    // Metoda Quicksort.
+    public static void quicksort(int[] pole, int levy, int pravy) {
+        if (levy < pravy) {
+            int mez = levy;
+            for (int i = levy + 1; i < pravy; i++) {
+                if (pole[i] > pole[levy]) {
+                    prohozeniPrvku(pole, i, ++mez);
+                }
+            }
+            prohozeniPrvku(pole, levy, mez);
+            quicksort(pole, levy, mez);
+            quicksort(pole, mez + 1, pravy);
+        }
+    }
+
+    private static void prohozeniPrvku(int[] pole, int levy, int pravy) {
+        int temp = pole[pravy];
+        pole[pravy] = pole[levy];
+        pole[levy] = temp;
+    }
+
+    // Metoda Merge sort.
+    public static void mergeSort(int[] pole, int[] pomocnePole, int levy, int pravy) {
+        if (levy == pravy) {
+            return;
+        }
+        int stredniIndex = (levy + pravy) / 2;
+        mergeSort(pole, pomocnePole, levy, stredniIndex);
+        mergeSort(pole, pomocnePole, stredniIndex + 1, pravy);
+        merge(pole, pomocnePole, levy, pravy);
+        for (int i = levy; i <= pravy; i++) {
+            pole[i] = pomocnePole[i];
+        }
+    }
+
+    private static void merge(int[] pole, int[] pomocnePole, int levy, int pravy) {
+        int stredniIndex = (levy + pravy) / 2;
+        int levyIndex = levy;
+        int pravyIndex = stredniIndex + 1;
+        int pomocnePoleIndex = levy;
+        while (levyIndex <= stredniIndex && pravyIndex <= pravy) {
+            if (pole[levyIndex] >= pole[pravyIndex]) {
+                pomocnePole[pomocnePoleIndex] = pole[levyIndex++];
+            } else {
+                pomocnePole[pomocnePoleIndex] = pole[pravyIndex++];
+            }
+            pomocnePoleIndex++;
+        }
+        while (levyIndex <= stredniIndex) {
+            pomocnePole[pomocnePoleIndex] = pole[levyIndex++];
+            pomocnePoleIndex++;
+        }
+        while (pravyIndex <= pravy) {
+            pomocnePole[pomocnePoleIndex] = pole[pravyIndex++];
+            pomocnePoleIndex++;
+        }
+    }
+
+    // Metoda pro aplikaci třídících algoritmů na jednotlivé datové struktury.
+    public static void aplikaceTridicichAlgoritmu(int[][] pole) {
+        System.out.println(" Insert sort");
+        for (int i = 0; i < pole.length - 1; i++) {
+            insertSort(pole[i]);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+        }
+
+        System.out.println(" Bubble sort");
+        for (int i = 0; i < pole.length - 1; i++) {
+            bubbleSort(pole[i]);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+        }
+
+        System.out.println(" Quicksort");
+        for (int i = 0; i < pole.length - 1; i++) {
+            quicksort(pole[i], 0, pole.length);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+        }
+
+        System.out.println(" Merge sort");
+        for (int i = 0; i < pole.length - 1; i++) {
+            mergeSort(pole[i], pole[i], 0, pole.length);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+        }
+    }
+
+//        // Tisk pole polí.
+//        // Varianta A
 //        for (int i = 0; i < poleIntegerNahodny.length; i++) {
 //            for (int j = 0; j < poleIntegerNahodny[i].length; j++) {
 //                System.out.print(poleIntegerNahodny[i][j] + " ");
 //            }
 //            System.out.println(" ");
 //        }
-        // Varianta B
+//        // Varianta B
 //        System.out.print(Arrays.toString(polePoli[0]));
 //        System.out.print(Arrays.toString(polePoli[1]));
 //        System.out.print(Arrays.toString(polePoli[2]));
 //        System.out.print(Arrays.toString(polePoli[3]));
 //        System.out.print(Arrays.toString(polePoli[4]));
-    }
-
-    public static void insertSort(int[] array) {
-        for (int i = 0; i < array.length - 1; i++) {
-            int j = i + 1;
-            int temp = array[j];
-            while (j > 0 && temp > array[j-1]) {
-                array[j] = array[j-1];
-                j--;
-            }
-            array[j] = temp;
-        }
-    }
-    
-    public static void bubbleSort(int[] x) {
-        for (int i = 0; i < x.length; i++) {
-            for (int j = x.length - 1; j > i; j--) {
-                if (x[j] < x[j - 1]) {
-                    int temp = x[j];
-                    x[j] = x[j - 1];
-                    x[j - 1] = temp;
-                }
-            }
-        }
-    }
-    
-    public static void quicksort(int[] array, int left, int right){
-        if(left < right){
-            int boundary = left;
-            for(int i = left + 1; i < right; i++){
-                if(array[i] > array[left]){
-                    swapB(array, i, ++boundary);
-                }
-            }
-        swapB(array, left, boundary);
-        quicksort(array, left, boundary);
-        quicksort(array, boundary + 1, right);
-        }    
-    }
-    
-    private static void swapB(int[] array, int left, int right){
-        int tmp = array[right];
-        array[right] = array[left];
-        array[left] = tmp;
-    }
-    
-    public static void heapsort(Comparable[] array, boolean descending) {
-        for (int i = array.length / 2 - 1; i >= 0; i--) {
-            repairTop(array, array.length - 1, i, descending ? 1 : -1);
-        }
-        for (int i = array.length - 1; i > 0; i--) {
-            swapH(array, 0, i);
-            repairTop(array, i - 1, 0, descending ? 1 : -1);
-        }
-    }
-    
-    private static void repairTop(Comparable[] array, int bottom, int topIndex, int order) {
-        Comparable tmp = array[topIndex];
-        int succ = topIndex * 2 + 1;
-        if (succ < bottom && array[succ].compareTo(array[succ + 1]) == order) {
-        succ++;
-        }
- 
-        while (succ <= bottom && tmp.compareTo(array[succ]) == order) {
-            array[topIndex] = array[succ];
-            topIndex = succ;
-            succ = succ * 2 + 1;
-            if (succ < bottom && array[succ].compareTo(array[succ + 1]) == order) {
-                succ++;
-            }
-        }
-        array[topIndex] = tmp;
-    }
-    
-    private static void swapH(Comparable[] array, int left, int right) {
-        Comparable tmp = array[right];
-        array[right] = array[left];
-        array[left] = tmp;
-    }
-    
-    public static aplikaceTridicichAlgoritmu (int [] array) {
-        System.out.println(" Insert sort");
-        insertSort(array[0]);
-        System.out.println("   Čas pro data o velikosti 10^2: " + System.nanoTime());
-        insertSort(array[1]);
-        System.out.println("   Čas pro data o velikosti 10^3: " + System.nanoTime());
-        insertSort(array[2]);
-        System.out.println("   Čas pro data o velikosti 10^4: " + System.nanoTime());
-        insertSort(array[3]);
-        System.out.println("   Čas pro data o velikosti 10^5: " + System.nanoTime());
-        insertSort(array[4]);
-        System.out.println("   Čas pro data o velikosti 10^6: " + System.nanoTime());
-
-        System.out.println(" Bubble sort");
-        bubbleSort(array[0]);
-        System.out.println("   Čas pro data o velikosti 10^2: " + System.nanoTime());
-        bubbleSort(array[1]);
-        System.out.println("   Čas pro data o velikosti 10^3: " + System.nanoTime());
-        bubbleSort(array[2]);
-        System.out.println("   Čas pro data o velikosti 10^4: " + System.nanoTime());
-        bubbleSort(array[3]);
-        System.out.println("   Čas pro data o velikosti 10^5: " + System.nanoTime());
-        bubbleSort(array[4]);
-        System.out.println("   Čas pro data o velikosti 10^6: " + System.nanoTime());
-
-        System.out.println(" Quicksort");
-        quicksort(array[0], 0, array.length);
-        System.out.println("   Čas pro data o velikosti 10^2: " + System.nanoTime());
-        quicksort(array[1], 0, array.length);
-        System.out.println("   Čas pro data o velikosti 10^3: " + System.nanoTime());
-        quicksort(array[2], 0, array.length);
-        System.out.println("   Čas pro data o velikosti 10^4: " + System.nanoTime());
-        quicksort(array[3], 0, array.length);
-        System.out.println("   Čas pro data o velikosti 10^5: " + System.nanoTime());
-        quicksort(array[4], 0, array.length);
-        System.out.println("   Čas pro data o velikosti 10^6: " + System.nanoTime());
-
-        System.out.println(" Heapsort");
-        heapsort(array[0], false);
-        System.out.println("   Čas pro data o velikosti 10^2: " + System.nanoTime());
-        heapsort(array[1]);
-        System.out.println("   Čas pro data o velikosti 10^3: " + System.nanoTime());
-        heapsort(array[2]);
-        System.out.println("   Čas pro data o velikosti 10^4: " + System.nanoTime());
-        heapsort(array[3]);
-        System.out.println("   Čas pro data o velikosti 10^5: " + System.nanoTime());
-        heapsort(array[4]);
-        System.out.println("   Čas pro data o velikosti 10^6: " + System.nanoTime());
-    }
 }
