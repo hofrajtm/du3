@@ -27,8 +27,30 @@ public class Du3 {
 
         // Nadefinování hodnot polí pole pro náhodné integery.
         int[][] poleIntegerNahodne = polePoli;
-        int Min = -10000; //Integer.MIN_VALUE;
-        int Max = 10000; //Integer.MAX_VALUE;
+        int Min = 0; //Integer.MIN_VALUE;
+        int Max = 0; //Integer.MAX_VALUE;
+        switch (poleIntegerNahodne.length) {
+            case 100:
+                Min = -100;
+                Max = 100;
+                break;
+            case 1000:
+                Min = -1000;
+                Max = 1000;
+                break;
+            case 10000:
+                Min = -10000;
+                Max = 10000;
+                break;
+            case 100000:
+                Min = -100000;
+                Max = 100000;
+                break;
+            case 1000000:
+                Min = -1000000;
+                Max = 1000000;
+                break;
+        }
         for (int i = 0; i < poleIntegerNahodne.length; i++) {
             for (int j = 0; j < poleIntegerNahodne[i].length; j++) {
                 poleIntegerNahodne[i][j] = (int) (Math.random() * (Min) + Math.random() * (Max));
