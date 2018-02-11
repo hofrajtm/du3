@@ -157,25 +157,25 @@ public class Du3 {
     // Metoda pro aplikaci třídících algoritmů na jednotlivé datové struktury.
     public static void aplikaceTridicichAlgoritmu(int[][] pole) {
         System.out.println(" Insert sort");
-        for (int i = 0; i < pole.length - 1; i++) {
+        for (int i = 0; i < pole.length; i++) {
             insertSort(pole[i]);
             System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
         }
 
         System.out.println(" Bubble sort");
-        for (int i = 0; i < pole.length - 1; i++) {
+        for (int i = 0; i < pole.length; i++) {
             bubbleSort(pole[i]);
             System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
         }
 
         System.out.println(" Quicksort");
-        for (int i = 0; i < pole.length - 1; i++) {
+        for (int i = 0; i < pole.length; i++) {
             quicksort(pole[i], 0, pole.length);
             System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
         }
 
         System.out.println(" Merge sort");
-        for (int i = 0; i < pole.length - 1; i++) {
+        for (int i = 0; i < pole.length; i++) {
             mergeSort(pole[i], pole[i], 0, pole.length);
             System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
         }
