@@ -119,60 +119,79 @@ public class Du3 {
     }
 
     // Metoda Quicksort.
-    public static void quicksort(int[] pole, int levy, int pravy) {
-        if (levy < pravy) {
-            int mez = levy;
-            for (int i = levy + 1; i < pravy; i++) {
-                if (pole[i] > pole[levy]) {
-                    prohozeniPrvku(pole, i, ++mez);
-                }
-            }
-            prohozeniPrvku(pole, levy, mez);
-            quicksort(pole, levy, mez);
-            quicksort(pole, mez + 1, pravy);
+    public static void quicksort(int[] pole) {
+        quicksortOmezeny(pole, 0, pole.length - 1);
+    }
+
+    private static void quicksortOmezeny(int[] pole, int levy, int pravy) {
+        if (pravy >= levy) {
+            int pivot = levy;
+            int novyPivot = quicksortProhozeniPrvku(pole, levy, pravy, pivot);
+            quicksortOmezeny(pole, levy, novyPivot - 1);
+            quicksortOmezeny(pole, novyPivot + 1, pravy);
         }
     }
 
-    private static void prohozeniPrvku(int[] pole, int levy, int pravy) {
-        int temp = pole[pravy];
-        pole[pravy] = pole[levy];
-        pole[levy] = temp;
+    private static int quicksortProhozeniPrvku(int[] pole, int levy, int pravy, int pivot) {
+        int temp = pole[pivot];
+        pole[pivot] = pole[pravy];
+        pole[pravy] = temp;
+        int i = levy;
+        for (int j = levy; j < pravy; j++) {
+            if (pole[j] < pole[pravy]) {
+                temp = pole[i];
+                pole[i] = pole[j];
+                pole[j] = temp;
+                i++;
+            }
+        }
+        temp = pole[i];
+        pole[i] = pole[pravy];
+        pole[pravy] = temp;
+        return i;
     }
 
-    // Metoda Merge sort.
-    public static void mergeSort(int[] pole, int[] pomocnePole, int levy, int pravy) {
-        if (levy == pravy) {
+    // Merge Sort
+    public static void mergeSort(int[] pole) {
+        if (pole.length <= 1) {
             return;
         }
-        int stredniIndex = (levy + pravy) / 2;
-        mergeSort(pole, pomocnePole, levy, stredniIndex);
-        mergeSort(pole, pomocnePole, stredniIndex + 1, pravy);
-        merge(pole, pomocnePole, levy, pravy);
-        for (int i = levy; i <= pravy; i++) {
-            pole[i] = pomocnePole[i];
+        int stredPole = pole.length / 2;
+        int[] levePole = new int[stredPole];
+        for (int i = 0; i < stredPole; i++) {
+            levePole[i] = pole[i];
         }
+        int[] pravePole = new int[pole.length - stredPole];
+        for (int i = stredPole; i < pole.length; i++) {
+            pravePole[i - stredPole] = pole[i];
+        }
+        mergeSort(levePole);
+        mergeSort(pravePole);
+        mergeSlitiPoli(pole, levePole, pravePole);
     }
 
-    private static void merge(int[] pole, int[] pomocnePole, int levy, int pravy) {
-        int stredniIndex = (levy + pravy) / 2;
-        int levyIndex = levy;
-        int pravyIndex = stredniIndex + 1;
-        int pomocnePoleIndex = levy;
-        while (levyIndex <= stredniIndex && pravyIndex <= pravy) {
-            if (pole[levyIndex] >= pole[pravyIndex]) {
-                pomocnePole[pomocnePoleIndex] = pole[levyIndex++];
+    private static void mergeSlitiPoli(int[] pole, int[] levePole, int[] pravePole) {
+        int i = 0;
+        int j = 0;
+        while ((i < levePole.length) && (j < pravePole.length)) {
+            if (levePole[i] < pravePole[j]) {
+                pole[i + j] = levePole[i];
+                i++;
             } else {
-                pomocnePole[pomocnePoleIndex] = pole[pravyIndex++];
+                pole[i + j] = pravePole[j];
+                j++;
             }
-            pomocnePoleIndex++;
         }
-        while (levyIndex <= stredniIndex) {
-            pomocnePole[pomocnePoleIndex] = pole[levyIndex++];
-            pomocnePoleIndex++;
-        }
-        while (pravyIndex <= pravy) {
-            pomocnePole[pomocnePoleIndex] = pole[pravyIndex++];
-            pomocnePoleIndex++;
+        if (i < levePole.length) {
+            while (i < levePole.length) {
+                pole[i + j] = levePole[i];
+                i++;
+            }
+        } else {
+            while (j < pravePole.length) {
+                pole[i + j] = pravePole[j];
+                j++;
+            }
         }
     }
 
@@ -180,26 +199,30 @@ public class Du3 {
     public static void aplikaceTridicichAlgoritmu(int[][] pole) {
         System.out.println(" Insert sort");
         for (int i = 0; i < pole.length; i++) {
+            long casPocatecni = System.nanoTime();
             insertSort(pole[i]);
-            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + (System.nanoTime() - casPocatecni) + " nanosekund");
         }
 
         System.out.println(" Bubble sort");
         for (int i = 0; i < pole.length; i++) {
+            long casPocatecni = System.nanoTime();
             bubbleSort(pole[i]);
-            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + (System.nanoTime() - casPocatecni) + " nanosekund");
         }
 
         System.out.println(" Quicksort");
         for (int i = 0; i < pole.length; i++) {
-            quicksort(pole[i], 0, pole.length);
-            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+            long casPocatecni = System.nanoTime();
+            quicksort(pole[i]);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + (System.nanoTime() - casPocatecni) + " nanosekund");
         }
 
         System.out.println(" Merge sort");
         for (int i = 0; i < pole.length; i++) {
-            mergeSort(pole[i], pole[i], 0, pole.length);
-            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + System.nanoTime());
+            long casPocatecni = System.nanoTime();
+            mergeSort(pole[i]);
+            System.out.println("   Čas pro data o velikosti 10^" + (i + 2) + ": " + (System.nanoTime() - casPocatecni) + " nanosekund");
         }
     }
 
